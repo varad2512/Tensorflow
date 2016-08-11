@@ -39,7 +39,7 @@ def read_images_from_disk(input_queue):
 
 def next(batch):
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
-'''
+
     images = tf.convert_to_tensor(image_list, dtype=tf.string)
     labels = tf.convert_to_tensor(label_list, dtype=tf.string)
     num_epochs = 1
@@ -56,4 +56,3 @@ def next(batch):
     print image_batch
     print label_batch
     '''
-'''
