@@ -38,7 +38,7 @@ def read_images_from_disk(input_queue):
     return example, label
 '''
 
-def next(batch):
+def next():
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
     '''
     images = tf.convert_to_tensor(image_list, dtype=tf.string)
@@ -59,12 +59,16 @@ def next(batch):
     image = img.open(image_list[0]+".jpg")
     label = img.open(label_list[0]+".png")
     #print image
-    image_arr = np.array(image)
-    label_arr = np.array(label)
+    image_arr = np.array(image).astype(np.float32)
+    label_arr = np.array(label).astype(np.int32)
 
-    #print image_arr.shape
-    #print label_arr.shape
+    
 
-    return image_arr,label_arr
+    image_batch=np.array([image_arr])
+    label_batch=np.array([label_arr])
 
-#next(1)
+    print image_batch.shape
+    print label_batch.shape
+
+#    return image_batch,label_batch
+next()

@@ -1,6 +1,7 @@
 #import ImgSeg
 import tensorflow as tf
 import FCN_32
+from Import import *
 '''
 from   tensorflow.examples.tutorials.mnist import input_data
 mnist =input_data.read_data_sets("MNIST_data/" , one_hot = True )
@@ -11,7 +12,7 @@ train_obj.graph_build()
 
 print "Training..."
 
-reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 33])  # shape [batch_size*256*256, 33]
+reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 21])  # shape [batch_size*256*256, 33]
 reshaped_labels = tf.reshape(train_obj.y_true, [-1])  # shape [batch_size*256*256]
 loss = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels)
 train_step      = tf.train.AdamOptimizer(1e-4).minimize(loss)
@@ -34,7 +35,7 @@ accuracy           = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 summary_tensor     = [["cost_tensor", loss]]
                      #["accuracy_train", accuracy]]
 summary_op         = train_obj.summary_write(summary_tensor)
-writer             = tf.train.SummaryWriter("/Tensorboard",
+writer             = tf.train.SummaryWriter("/home/varad/work/Tensorflow/Tensorboard",
                      train_obj.sess.graph)
 
 train_obj.sess.run(tf.initialize_all_variables())
