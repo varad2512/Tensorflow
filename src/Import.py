@@ -1,5 +1,6 @@
 import tensorflow as tf
-import PIL
+import PIL as pl
+from PIL import Image as img
 import webbrowser
 import numpy as np
 def read_labeled_image_list(path):
@@ -53,15 +54,17 @@ def next(batch):
                                               batch_size=batch)
 
     '''
-    print image_list[:2]
-    print label_list[:2]
-    image = PIL.Image.open(image_list[0]+".jpg")
-    label = PIL.Image.open(label_list[0]+".png")
+    #print image_list[:2]
+    #print label_list[:2]
+    image = img.open(image_list[0]+".jpg")
+    label = img.open(label_list[0]+".png")
+    #print image
     image_arr = np.array(image)
     label_arr = np.array(label)
 
-    print image_arr.size
-    print label_arr.size 
+    #print image_arr.shape
+    #print label_arr.shape
 
+    return image_arr,label_arr
 
-next(1)
+#next(1)
