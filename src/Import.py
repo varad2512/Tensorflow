@@ -1,7 +1,7 @@
 import tensorflow as tf
-from PIL import Image
+import PIL
 import webbrowser
-
+import numpy as np
 def read_labeled_image_list(path):
     """Reads a .txt file containing paths and labeles
     Args:
@@ -22,7 +22,7 @@ def read_labeled_image_list(path):
         filenames.append(input_image_dir+line[:-1])
         labels.append(input_label_dir+line[:-1])
     return filenames, labels
-
+'''
 def read_images_from_disk(input_queue):
     """Consumes a single filename and label as a ' '-delimited string.
     Args:
@@ -35,11 +35,11 @@ def read_images_from_disk(input_queue):
     example        = tf.image.decode_jpeg(file_contents, channels=3)
     label          = tf.image.decode_png(label_contents,channels=3)
     return example, label
-
+'''
 
 def next(batch):
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
-'''
+    '''
     images = tf.convert_to_tensor(image_list, dtype=tf.string)
     labels = tf.convert_to_tensor(label_list, dtype=tf.string)
     num_epochs = 1
@@ -53,7 +53,15 @@ def next(batch):
                                               batch_size=batch)
 
     '''
-    print image_batch
-    print label_batch
-    '''
-'''
+    print image_list[:2]
+    print label_list[:2]
+    image = PIL.Image.open(image_list[0]+".jpg")
+    label = PIL.Image.open(label_list[0]+".png")
+    image_arr = np.array(image)
+    label_arr = np.array(label)
+
+    print image_arr.size
+    print label_arr.size 
+
+
+next(1)
