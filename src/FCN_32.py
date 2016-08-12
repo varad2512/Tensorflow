@@ -86,18 +86,18 @@ class FCN():
 
 
 
-        self.weight_FC1   =  self.weight_init([7,7,512, 4096] , "weight_FC1")
-        self.bias_FC1     =  self.bias_init([4096] , "bias_FC1")
-        h_FC1             =  tf.nn.relu(conv2d(h_pool13,self.weight_FC1) + self.bias_FC1)
+        self.weight_FC1   = self.weight_init([7,7,512, 4096] , "weight_FC1")
+        self.bias_FC1     = self.bias_init([4096] , "bias_FC1")
+        h_FC1             = tf.nn.relu(conv2d(h_pool13,self.weight_FC1) + self.bias_FC1)
 
-        self.weight_FC2   =  self.weight_init([1,1,4096,4096] , "weight_FC2")
-        self.bias_FC2     =  self.bias_init([4096] , "bias_FC2")
-        h_FC2             =  tf.nn.relu(conv2d(h_FC1,self.weight_FC2) + self.bias_FC2)
+        self.weight_FC2   = self.weight_init([1,1,4096,4096] , "weight_FC2")
+        self.bias_FC2     = self.bias_init([4096] , "bias_FC2")
+        h_FC2             = tf.nn.relu(conv2d(h_FC1,self.weight_FC2) + self.bias_FC2)
 
 
-        self.weight_FC3   =  self.weight_init([1,1,4096,1024] , "weight_FC3")
-        self.bias_FC3     =  self.bias_init([1024] , "bias_FC3")
-        h_FC3             =  conv2d(h_FC2,self.weight_FC3) + self.bias_FC3     #skip relu for last 1*1 conv layer
+        self.weight_FC3   = self.weight_init([1,1,4096,1024] , "weight_FC3")
+        self.bias_FC3     = self.bias_init([1024] , "bias_FC3")
+        h_FC3             = conv2d(h_FC2,self.weight_FC3) + self.bias_FC3     #skip relu for last 1*1 conv layer
 
         self.weight_deconv = self.weight_init([64,64,21,1024] , "weight_deconv")
 

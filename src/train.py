@@ -10,10 +10,18 @@ train_obj.graph_build()
 
 print "Training..."
 
+reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 33])  # shape [batch_size*256*256, 33]
+reshaped_labels = tf.reshape(train_obj.y_true, [-1])  # shape [batch_size*256*256]
+loss = sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels)
+
+
+
+
+'''
 l_cross_entropy    = tf.reduce_mean(-tf.reduce_sum(train_obj.y_true
                      * tf.log(train_obj.y_pred), reduction_indices=[1]))
 train_step         = tf.train.AdamOptimizer(1e-4).minimize(l_cross_entropy)
-
+'''
 
 '''correct_prediction = tf.equal(tf.argmax(train_obj.y_pred,1),
                      tf.argmax(train_obj.y_true,1))
