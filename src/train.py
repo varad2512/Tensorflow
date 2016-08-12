@@ -1,19 +1,20 @@
 #import ImgSeg
 import tensorflow as tf
+import FCN_32
 '''
 from   tensorflow.examples.tutorials.mnist import input_data
 mnist =input_data.read_data_sets("MNIST_data/" , one_hot = True )
 '''
 
-train_obj = ImgSeg.TwoLayerCNN(0,0)
+train_obj = FCN_32.FCN()
 train_obj.graph_build()
 
 print "Training..."
 
 reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 33])  # shape [batch_size*256*256, 33]
 reshaped_labels = tf.reshape(train_obj.y_true, [-1])  # shape [batch_size*256*256]
-loss = sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels)
-train_step         = tf.train.AdamOptimizer(1e-4).minimize(loss)
+loss = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels)
+train_step      = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
 
 
@@ -49,8 +50,8 @@ for i in range(1):
     #batch = mnist.train.next_batch(50)
 
     temp,summary_train = train_obj.sess.run([train_step,summary_op],
-                                            feed_dict = {train_obj.x:batch[0],
-                                            train_obj.y_true:batch[1]})
+                                            feed_dict = {train_obj.x:image,
+                                            train_obj.y_true:label})
 
 
 
