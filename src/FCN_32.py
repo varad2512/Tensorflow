@@ -12,13 +12,14 @@ class FCN(cnn_base.CNNBase):
         return tf.nn.max_pool(input, ksize=[1,2,2,1], strides=[1,2,2,1],
                                   padding = 'SAME')
 
+
     def graph_build(self):
 
         self.x            = tf.placeholder(tf.float32 ,name = "Input")
         self.y_true       = tf.placeholder(tf.int32 ,name = "Output")
         x_image           = tf.reshape(self.x, [-1,tf.shape(self.x)[1],tf.shape(self.x)[2],tf.shape(self.x)[3]])
 
-        self.w_conv1      = self.weight_init([3,3,1,64],"weight1")
+        self.w_conv1      = self.weight_init([3,3,3,64],"weight1")
         self.b_conv1      = self.bias_init([64],"bias1")
         h_conv1           = self.convolve_activate(x_image, self.w_conv1,self.b_conv1)
 
@@ -94,8 +95,8 @@ class FCN(cnn_base.CNNBase):
 
         self.weight_FC3   = self.weight_init([1,1,4096,1024] , "weight_FC3")
         self.bias_FC3     = self.bias_init([1024] , "bias_FC3")
-        h_FC3             = tf.nn.conv2d(h_FC2,self.weight_FC3, strides=[1,1,1,1],padding='SAME')+ self.bias_FC3     #skip relu for last 1*1 conv layer
+        self.h_FC3        = tf.nn.conv2d(h_FC2, self.weight_FC3, strides=[1,1,1,1],padding='SAME') + self.bias_FC3     #skip relu for last 1*1 conv layer
 
-        self.weight_deconv = self.weight_init([64,64,21,1024] , "weight_deconv")
+        self.weight_deconv = self.weight_init([32,32,21,1024] , "weight_deconv")
 
-        self.transpose_conv =  tf.nn.conv2d_transpose(h_FC3, self.weight_deconv , [tf.shape(self.x)[0],tf.shape(self.x)[1],tf.shape(self.x)[2],21], [1,32,32,1], padding='VALID', name="DECONVOLUTION")
+        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [tf.shape(self.x)[0],tf.shape(self.x)[1],tf.shape(self.x)[2],21], [1,32,32,1], padding='VALID', name="DECONVOLUTION")
