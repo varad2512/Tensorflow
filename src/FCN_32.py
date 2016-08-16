@@ -99,4 +99,4 @@ class FCN(cnn_base.CNNBase):
 
         self.weight_deconv = self.weight_init([32,32,21,1024] , "weight_deconv")
 
-        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [tf.shape(self.x)[0],tf.shape(self.x)[1],tf.shape(self.x)[2],21], [1,32,32,1], padding='VALID', name="DECONVOLUTION")
+        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [tf.shape(self.x)[0],tf.shape(self.x)[1],tf.shape(self.x)[2],21], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
