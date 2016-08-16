@@ -61,6 +61,7 @@ def next():
     #print image
     image_arr = np.array(image).astype(np.float32)
     label_arr = np.array(label).astype(np.int32)
+<<<<<<< HEAD
     #print image_arr.shape
 
     label_arr = np.dstack(label_arr)
@@ -82,3 +83,16 @@ def next():
 
     return image_arr, label_arr
 #next()
+=======
+
+    
+
+    image_batch=np.array([image_arr])
+    label_batch=np.array([label_arr])
+
+    print image_batch.shape
+    print label_batch.shape
+
+#    return image_batch,label_batch
+next()
+>>>>>>> ee3267f7e0705347cb9f4e75bf1933f7de4cf5a8
