@@ -54,31 +54,56 @@ def next():
                                               batch_size=batch)
 
     '''
+    import random
     #print image_list[:2]
     #print label_list[:2]
-    image = img.open(image_list[0]+".jpg")
-    label = img.open(label_list[0]+".png")
+    random_ind = random.randint(1,1000)
+    image = img.open(image_list[random_ind]+".jpg")
+    label = img.open(label_list[random_ind]+".png")
     #print image
     image_arr = np.array(image).astype(np.float32)
     label_arr = np.array(label).astype(np.int32)
-    #print image_arr.shape
+    print image_arr.shape
+    print label_arr.shape
 
+
+
+
+    '''
     label_arr = np.dstack(label_arr)
     print label_arr.shape
+
     label_arr= np.rollaxis(label_arr,-1)
-    label_arr=np.rollaxis(label_arr,-1)
     print label_arr.shape
 
+    label_arr=np.rollaxis(label_arr,-1)
+    print label_arr.shape
+    '''
     image_batch=np.array([image_arr])
     label_batch=np.array([label_arr])
 
 
-    #print label_arr.shape
+    print label_batch.shape
+    print image_batch.shape
+    label_batch = np.dstack(label_batch)
+    print label_batch.shape
 
     image_arr = tf.convert_to_tensor(image_batch ,dtype = tf.float32)
     label_arr = tf.convert_to_tensor(label_batch , dtype = tf.int32)
+
     image_arr = tf.image.resize_images(image_arr, 256, 256, method = 2)
     label_arr = tf.image.resize_images(label_arr, 256, 256, method = 2)
 
+    sess = tf.InteractiveSession()
+    label_arr = label_arr.eval()
+
+    label_arr= np.rollaxis(label_arr,-1)
+    label_arr = tf.convert_to_tensor(label_arr , dtype = tf.int32)
+
+
+    #label_arr = tf.reshape(label_arr,[1,256,256])
+
     return image_arr, label_arr
+
+
 #next()

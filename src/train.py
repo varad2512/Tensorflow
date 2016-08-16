@@ -12,11 +12,12 @@ train_obj.graph_build()
 
 print "Training..."
 
-reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 21])  # shape [batch_size*256*256, 33]
+reshaped_logits = tf.reshape(train_obj.transpose_conv, [-1, 21])  # shape [batch_size*256*256, 21]
 reshaped_labels = tf.reshape(train_obj.y_true, [-1])  # shape [batch_size*256*256]
-loss            = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels)
+loss            = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits, reshaped_labels,name="cost_tensor")
 train_step      = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
+loss            = tf.reduce_mean(loss)
 
 '''
 l_cross_entropy    = tf.reduce_mean(-tf.reduce_sum(train_obj.y_true
@@ -31,7 +32,7 @@ accuracy           = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 
 
-summary_tensor     = [["cost_tensor", tf.nn.zero_fraction(loss)]]
+summary_tensor     = [["cost_tensor", loss]]
                      #["accuracy_train", accuracy]]
 summary_op         = train_obj.summary_write(summary_tensor)
 writer             = tf.train.SummaryWriter("/home/varad/work/Tensorflow/Tensorboard",
@@ -46,27 +47,32 @@ variable_list_save = [train_obj.w_conv1,train_obj.b_conv1,train_obj.w_conv2
 saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
-image,label = next()
 
-for i in range(1):
-    #batch = mnist.train.next_batch(50)
+for j in range(1):
+    for i in range(200):
+        #batch = mnist.train.next_batch(50)
+        image,label = next()
+        summary_accuracy,k,l,temp,_=train_obj.sess.run([summary_op,train_obj.transpose_conv,loss,train_obj.h_FC3,train_step],feed_dict = {train_obj.x:image.eval(), train_obj.y_true:label.eval()})
+        print i
+        '''
+        print temp.shape
+        print k.shape
+        print l.shape
+        '''
+        #print k.shape
+        #print l.shape
+        writer.add_summary(summary_accuracy,i+20)
 
-    summary_accuracy,k,l,temp,_=train_obj.sess.run([summary_op,train_obj.transpose_conv,loss,train_obj.h_FC3,train_step],feed_dict = {train_obj.x:image.eval(), train_obj.y_true:label.eval()})
-    print temp.shape
-    print k.shape
-    print l.shape
-    writer.add_summary(summary_accuracy,i)
 
+        '''
+        temp = []
+        temp = k[0,:,:,:]
 
-    '''
-    temp = []
-    temp = k[0,:,:,:]
+        print temp.shape
+        from PIL import Image
+        img = Image.fromarray(temp, 'RGB')
+        img.save('my.png')
+        img.show()
 
-    print temp.shape
-    from PIL import Image
-    img = Image.fromarray(temp, 'RGB')
-    img.save('my.png')
-    img.show()
-
-    print training_accuracy
-    '''
+        print training_accuracy
+        '''
