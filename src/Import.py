@@ -58,20 +58,33 @@ def next():
     import random
     #print image_list[:2]
     #print label_list[:2]
+
     random_ind = random.randint(1,1000)
     #image = img.open(image_list[30]+".jpg")#.resize((256,256))
 
 
-    image = misc.imread(image_list[30]+".jpg")
+    image = misc.imread(image_list[3]+".jpg")
 
 
-    label = img.open(label_list[31]+".png").convert('RGB')#.resize((256,256))
-
-    label.save(label_list[31]+".jpg")
-
+    label = img.open(label_list[3]+".png")#.resize((256,256))
+    #has_alpha = label.mode == 'RGB'
+    #print has_alpha
     print label
+    label_arr = np.array(label).astype(np.float32)
+    print label_arr
+    '''
+    label.load()
 
+    label = label.split()[3]
+    label = label.convert('RGB')
 
+    print label_arr
+    #label.save(label_list[31]+".jpg",transparency = 0)
+    #webbrowser.open(label_list[31]+".png")
+    #print label
+    #label = tf.image.decode_png(label_list[31], channels = None  , dtype = None, name=None)
+    #print label
+    '''
     '''
     label = label.convert('RGBA')
 
@@ -85,10 +98,8 @@ def next():
     print label
     '''
     #image_arr = np.array(image).astype(np.float32)
-    label_arr = np.array(label)
 
-    print label_arr.shape
-    '''
+
     #print label_arr.dtype
     pal = label.getpalette()
     num_colours = len(pal)/3
@@ -97,10 +108,14 @@ def next():
     print max_val
     map = np.array(pal).reshape(num_colours, 3) / max_val
 
-    print map.shape
+    print map.dtype
+    print map
+
+    print map[label_arr]
+    '''
 
     img1 = img.fromarray(map,"RGB")
-    #webbrowser.open(label_list[0]+".png")
+
     img1.save('my.png')
 
     #print image_arr.shape
