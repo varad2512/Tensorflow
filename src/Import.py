@@ -3,6 +3,7 @@ import PIL as pl
 from PIL import Image as img
 import webbrowser
 import numpy as np
+from scipy import misc
 def read_labeled_image_list(path):
     """Reads a .txt file containing paths and labeles
     Args:
@@ -58,14 +59,53 @@ def next():
     #print image_list[:2]
     #print label_list[:2]
     random_ind = random.randint(1,1000)
-    image = img.open(image_list[random_ind]+".jpg")
-    label = img.open(label_list[random_ind]+".png")
-    #print image
-    image_arr = np.array(image).astype(np.float32)
-    label_arr = np.array(label).astype(np.int32)
-    print image_arr.shape
-    print label_arr.shape
+    #image = img.open(image_list[30]+".jpg")#.resize((256,256))
 
+
+    image = misc.imread(image_list[30]+".jpg")
+
+
+    label = img.open(label_list[31]+".png").convert('RGB')#.resize((256,256))
+
+    label.save(label_list[31]+".jpg")
+
+    print label
+
+
+    '''
+    label = label.convert('RGBA')
+
+    label.load()
+    non_transparent=img.new('RGB',label.size,(255,255,255))
+    non_transparent.paste(label,mask=label.split()[3])
+    label = non_transparent
+    #label = misc.imread(label_list[30]+".png",'P')
+
+    print image.shape
+    print label
+    '''
+    #image_arr = np.array(image).astype(np.float32)
+    label_arr = np.array(label)
+
+    print label_arr.shape
+    '''
+    #print label_arr.dtype
+    pal = label.getpalette()
+    num_colours = len(pal)/3
+    print num_colours
+    max_val = float(np.iinfo(label_arr.dtype).max)
+    print max_val
+    map = np.array(pal).reshape(num_colours, 3) / max_val
+
+    print map.shape
+
+    img1 = img.fromarray(map,"RGB")
+    #webbrowser.open(label_list[0]+".png")
+    img1.save('my.png')
+
+    #print image_arr.shape
+    #print label_arr.shape
+    '''
 
 
 
@@ -78,7 +118,7 @@ def next():
 
     label_arr=np.rollaxis(label_arr,-1)
     print label_arr.shape
-    '''
+
     image_batch=np.array([image_arr])
     label_batch=np.array([label_arr])
 
@@ -105,5 +145,5 @@ def next():
 
     return image_arr, label_arr
 
-
-#next()
+    '''
+next()
