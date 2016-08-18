@@ -60,18 +60,19 @@ def next():
     #print label_list[:2]
 
     random_ind = random.randint(1,1000)
-    #image = img.open(image_list[30]+".jpg")#.resize((256,256))
-
+    image = img.open(image_list[30]+".jpg")#.resize((256,256))
+    image.show()
 
     image = misc.imread(image_list[3]+".jpg")
 
 
-    label = img.open(label_list[3]+".png")#.resize((256,256))
+    label = img.open(label_list[3]+".png").resize((256,256))
+
     #has_alpha = label.mode == 'RGB'
     #print has_alpha
     print label
     label_arr = np.array(label).astype(np.float32)
-    print label_arr
+    print label_arr.shape
     '''
     label.load()
 
@@ -99,7 +100,7 @@ def next():
     '''
     #image_arr = np.array(image).astype(np.float32)
 
-
+    '''
     #print label_arr.dtype
     pal = label.getpalette()
     num_colours = len(pal)/3
@@ -113,7 +114,7 @@ def next():
 
     print map[label_arr]
     '''
-
+    '''
     img1 = img.fromarray(map,"RGB")
 
     img1.save('my.png')
