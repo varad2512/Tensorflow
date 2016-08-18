@@ -60,19 +60,20 @@ def next():
     #print label_list[:2]
 
     random_ind = random.randint(1,1000)
-    image = img.open(image_list[30]+".jpg")#.resize((256,256))
-    image.show()
+    image = img.open(image_list[random_ind]+".jpg").resize((256,256))
+    image_arr = np.array(image)
+    #image.show()
+    #webbrowser.open(label_list[random_ind]+".png")
+    #image = misc.imread(image_list[random_ind]+".jpg")
+    #print image
 
-    image = misc.imread(image_list[3]+".jpg")
-
-
-    label = img.open(label_list[3]+".png").resize((256,256))
-
+    label = img.open(label_list[random_ind]+".png").resize((256,256))
+    label_arr=np.array(label).astype(np.uint8)
     #has_alpha = label.mode == 'RGB'
     #print has_alpha
-    print label
-    label_arr = np.array(label).astype(np.float32)
-    print label_arr.shape
+    #print label.shape
+    #print np.amax(label_arr,axis=0)
+    #print np.amax(label_arr,axis=1)
     '''
     label.load()
 
@@ -100,32 +101,65 @@ def next():
     '''
     #image_arr = np.array(image).astype(np.float32)
 
-    '''
+
     #print label_arr.dtype
     pal = label.getpalette()
     num_colours = len(pal)/3
-    print num_colours
+    #print num_colours
     max_val = float(np.iinfo(label_arr.dtype).max)
-    print max_val
-    map = np.array(pal).reshape(num_colours, 3) / max_val
+    #print max_val
+    map = np.array(pal).reshape(num_colours, 3)
 
-    print map.dtype
-    print map
+    #print map.dtype
+    #print map.shape
+    #print map
+    #img_arr =
+    #temp=255 * label_arr
 
-    print map[label_arr]
-    '''
-    '''
-    img1 = img.fromarray(map,"RGB")
 
-    img1.save('my.png')
+
+    temp=[]
+    temp = np.zeros([256,256,3])
+
+
+    for i in range (255):
+        for j in range (255):
+            temp1 = label_arr[i,j]
+            temp[i,j,0]  =map[temp1,0]
+            temp[i,j,1]  =map[temp1,1]
+            temp[i,j,2]  =map[temp1,2]
+
+
+
+
+    temp = temp.astype(np.uint8)
+    img1 = img.fromarray(temp,"RGB").convert('L')
+    temp = np.array(img1)
+    temp = temp[np.newaxis, ...]
+
+    image_arr = image_arr[np.newaxis, ...]
+
+    print temp.shape
+    print image_arr.shape
+
+
+
+
+
+
+
+    #img1.save('my.png')
 
     #print image_arr.shape
     #print label_arr.shape
     '''
+    #img1 = img.fromarray(temp,"L")
+    #img1.save('my.png')
+    #webbrowser.open('my.png')
 
 
 
-    '''
+
     label_arr = np.dstack(label_arr)
     print label_arr.shape
 
@@ -162,4 +196,6 @@ def next():
     return image_arr, label_arr
 
     '''
-next()
+    return image_arr, temp
+
+#next()
