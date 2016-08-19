@@ -17,7 +17,7 @@ class FCN(cnn_base.CNNBase):
     def graph_build(self):
 
         self.x            = tf.placeholder(tf.float32 ,name = "Input")
-        self.y_true       = tf.placeholder(tf.int32 ,name = "Output")
+        self.y_true       = tf.placeholder(tf.int64 ,name = "Output")
         x_image           = tf.reshape(self.x, [-1,tf.shape(self.x)[1],tf.shape(self.x)[2],tf.shape(self.x)[3]])
 
 
@@ -95,6 +95,6 @@ class FCN(cnn_base.CNNBase):
         self.bias_FC3     = self.bias_init([1000] , "bias_FC3")
         self.h_FC3        = tf.nn.conv2d(h_FC2, self.weight_FC3, strides=[1,1,1,1],padding='SAME') + self.bias_FC3     #skip relu for last 1*1 conv layer
 
-        self.weight_deconv = self.weight_init([64,64,21,1000] , "weight_deconv")
+        self.weight_deconv = self.weight_init([64,64,20,1000] , "weight_deconv")
 
-        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,21], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
+        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,20], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
