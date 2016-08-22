@@ -2,7 +2,7 @@
 import tensorflow as tf
 import FCN_32
 from Import import *
-
+import numpy as np
 
 train_obj = FCN_32.FCN()
 train_obj.graph_build()
@@ -15,7 +15,7 @@ loss            = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits
                                               reshaped_labels,name="cost_tensor")
 train_step      = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
-loss            = tf.reduce_mean(loss)
+loss            = tf.reduce_mean(tf.reduce_sum(loss))
 
 temp = tf.argmax(train_obj.transpose_conv,3)
 correct_prediction = tf.equal(temp,train_obj.y_true)
@@ -62,3 +62,29 @@ for i in range(100):
     print i
 
     writer.add_summary(summary_accuracy,i)
+
+
+
+
+
+colour_map = [[ 0, 0 ,0],
+              [ 128,0 ,0],
+              [0,128,0],
+              [0,0,128],
+              [128,0,128],
+              [0,128,128],
+              [128,128,128],
+              [64,0,0],
+              [192,0,0],
+              [64,128,0],
+              [192,128,0],
+              [64,0,128],
+              [192,0,128],
+              [64,128,128],
+              [192,128,128],
+              [0,64,0],
+              [128,64,0],
+              [128,192,0],
+              [0,64,128],
+              [224,224,192]]
+colour_map = np,asarray(colour_map)
