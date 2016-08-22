@@ -97,4 +97,4 @@ class FCN(cnn_base.CNNBase):
 
         self.weight_deconv = self.weight_init([64,64,20,1000] , "weight_deconv")
 
-        self.transpose_conv = tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,20], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
+        self.transpose_conv = tf.sigmoid(tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,20], [1,32,32,1], padding='SAME', name="DECONVOLUTION"))

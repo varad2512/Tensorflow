@@ -18,13 +18,14 @@ def read_labeled_image_list(path):
         labels.append(input_label_dir+line[:-1])
     return filenames, labels
 
-def next(num):
+def next():
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
 
+    from random import randint
+    random_ind = randint(0,1000)
 
-
-    image = img.open(image_list[num]+".jpg").resize((256,256))
-    label = img.open(label_list[num]+".png").resize((256,256))
+    image = img.open(image_list[random_ind]+".jpg").resize((256,256))
+    label = img.open(label_list[random_ind]+".png").resize((256,256))
 
     label_arr = np.asarray(label)
     image_arr = np.array(image)
