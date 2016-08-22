@@ -18,7 +18,7 @@ def read_labeled_image_list(path):
         labels.append(input_label_dir+line[:-1])
     return filenames, labels
 
-def next():
+def next
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
 
     from random import randint
