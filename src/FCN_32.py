@@ -91,10 +91,10 @@ class FCN(cnn_base.CNNBase):
         h_FC2             = self.convolve_activate(h_FC1,self.weight_FC2,self.bias_FC2)
 
 
-        self.weight_FC3   = self.weight_init([1,1,4096,1000] , "weight_FC3")
-        self.bias_FC3     = self.bias_init([1000] , "bias_FC3")
+        self.weight_FC3   = self.weight_init([1,1,4096,21] , "weight_FC3")
+        self.bias_FC3     = self.bias_init([21] , "bias_FC3")
         self.h_FC3        = tf.nn.conv2d(h_FC2, self.weight_FC3, strides=[1,1,1,1],padding='SAME') + self.bias_FC3     #skip relu for last 1*1 conv layer
 
-        self.weight_deconv = self.weight_init([64,64,20,1000] , "weight_deconv")
+        #self.weight_deconv = self.weight_init([32,32,21,1000] , "weight_deconv")
 
-        self.transpose_conv =   tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,20], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
+        #self.transpose_conv =   tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,21], [1,32,32,1], padding='SAME', name="DECONVOLUTION")

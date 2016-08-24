@@ -1,4 +1,4 @@
-# Base class for Convolutional Neural Network. Inherit this class for models that
+  # Base class for Convolutional Neural Network. Inherit this class for models that
 # are to be created.
 
 import tensorflow as tf
