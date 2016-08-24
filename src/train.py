@@ -1,4 +1,4 @@
-#import ImgSeg
+ #import ImgSeg
 import tensorflow as tf
 import FCN_32
 from Import import *
@@ -22,7 +22,7 @@ softmax            = tf.nn.softmax(reshaped_logits)
 
 loss               = train_obj.y_true * tf.log(softmax)
 '''
-train_step         = tf.train.AdamOptimizer(1e-6).minimize(loss)
+train_step         = tf.train.AdamOptimizer(1e-4).minimize(loss)
 #train_step         = tf.train.GradientDescentOptimizer(0.5).minimize(loss)
 
 loss               = tf.reduce_mean(loss)
