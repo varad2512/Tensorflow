@@ -64,7 +64,7 @@ saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
 
-for i in range(10000):
+for i in range(100000):
     image,label = next(i)
 
     accu,temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([accuracy,train_obj.h_FC3,temp,summary_op,train_step],

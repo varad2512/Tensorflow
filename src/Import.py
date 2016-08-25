@@ -30,7 +30,7 @@ def next(num):
     #webbrowser.open(label_list[num]+".png")
     #label.save("shortened.png")
 
-    if num == 9999:
+    if num == 99999:
         #webbrowser.open("shortened.png")
         webbrowser.open(label_list[random_ind]+".png")
 
@@ -50,7 +50,7 @@ def next(num):
             if label_arr[i,j] == 255:
                 label_arr_new[i,j] = 19
 
-    print np.max(label_arr_new)
+    #print np.max(label_arr_new)
 
     label_arr = label_arr_new.astype(np.uint64)
     image_arr = image_arr[np.newaxis, ...]
