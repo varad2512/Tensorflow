@@ -15,6 +15,10 @@ class TwoLayerCNN(cnn_base.CNNBase):
                               padding = 'SAME')
 
 
+
+
+
+
     def graph_build(self):
         self.x       = tf.placeholder( tf.float32 , shape = [None,784] ,
                        name = "Input" )

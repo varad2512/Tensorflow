@@ -10,27 +10,31 @@ train_obj = FCN_32.FCN()
 train_obj.graph_build()
 
 print "Training..."
-h_FC3_1            = tf.image.resize_bilinear(train_obj.h_FC3, [256,256], align_corners=None, name=None)
-reshaped_logits    = tf.reshape(h_FC3_1, [-1, 21])  # shape [batch_size*256*256, 20]
+#h_FC3_1            = tf.image.resize_bilinear(train_obj.h_FC3, [256,256], align_corners=None, name=None)
+reshaped_logits    = tf.reshape(train_obj.transpose_conv, [-1, 21])  # shape [batch_size*256*256, 20]
 reshaped_labels    = tf.reshape(train_obj.y_true, [-1])              # shape [batch_size*256*256]
 
 loss               = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits,
-                                         reshaped_labels,name="cost_tensor")
+                                                     reshaped_labels,name="cost_tensor")
 
-'''
-softmax            = tf.nn.softmax(reshaped_logits)
+loss               = tf.reshape(loss,[1,256*256])
+loss               = tf.reduce_sum(loss,1)
+loss               = tf.reduce_mean(loss)
 
-loss               = train_obj.y_true * tf.log(softmax)
-'''
 train_step         = tf.train.AdamOptimizer(1e-4).minimize(loss)
 #train_step         = tf.train.GradientDescentOptimizer(0.5).minimize(loss)
 
-loss               = tf.reduce_mean(loss)
 
-temp               = tf.argmax(h_FC3_1,3)
-correct_prediction = tf.equal(temp,train_obj.y_true)
+#softmax            = tf.nn.softmax(reshaped_logits)
+#softmax            = tf.reshape(softmax , [1,256,256,21])
+
+
+temp               = tf.argmax(train_obj.transpose_conv,3)
+'''
+temp               = tf.reshape(temp,[1,tf.shape(train_obj.transpose_conv)[1],tf.shape(train_obj.transpose_conv)[2]  ])
+correct_prediction = tf.equal(tf.reshape(temp,[-1]),tf.reshape(train_obj.y_true,[-1]))
 accuracy           = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-
+'''
 
 
 
@@ -49,9 +53,9 @@ accuracy           = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 #tf.scalar_summary("cost_train",loss)
 #summary_op         = tf.merge_all_summaries()
 
-summary_tensor     = [["cost_tensor", loss],["accuracy_train", accuracy]]
+summary_tensor     = [["cost_tensor", loss]]#["accuracy_train", accuracy]#]
 summary_op         = train_obj.summary_write(summary_tensor)
-writer             = tf.train.SummaryWriter("/home/varad/work/Tensorflow/Tensorboard",
+writer             = tf.train.SummaryWriter("/home/varad/work/Tensorflow/Image_Segmentation/Tensorboard",
                      train_obj.sess.graph)
 
 #tf.scalar("loss",loss)
@@ -64,20 +68,23 @@ saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
 
-for i in range(100000):
+for i in range(50):
     image,label = next(i)
 
-    accu,temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([accuracy,train_obj.h_FC3,temp,summary_op,train_step],
+    temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([train_obj.transpose_conv,temp,summary_op,train_step],
                                 feed_dict = {train_obj.x:image,
                                train_obj.y_true:label})
     print i
+    print np.max(temp_1)
 
-    writer.add_summary(summary_accuracy,i+50)
+    #f i % 50 == 0:
+    writer.add_summary(summary_accuracy,i)
 
-print accu
+#print accu
 
 
 print "k",temp_2
+
 colour_map = [[ 0, 0 ,0],
               [ 128,0 ,0],
               [0,128,0],
@@ -124,7 +131,8 @@ print final.shape
 print final
 final = final.astype(np.uint8)
 
-img1 = img.fromarray(final,"RGB")
+img1 = img.fromarray(final,'RGB')
+img1.show()
 img1.save("my.png")
 #my = img.open("my.png").resize((256,256))
 webbrowser.open("my.png")

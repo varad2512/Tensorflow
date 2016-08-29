@@ -18,7 +18,7 @@ class FCN(cnn_base.CNNBase):
 
         self.x            = tf.placeholder(tf.float32 ,name = "Input")
         self.y_true       = tf.placeholder(tf.int64 ,name = "Output")
-        x_image           = tf.reshape(self.x, [-1,tf.shape(self.x)[1],tf.shape(self.x)[2],tf.shape(self.x)[3]])
+        x_image           = tf.reshape(self.x, [-1,tf.shape(self.x)[1],tf.shape(self.x)[2],3] )
 
 
         self.w_conv2      = self.weight_init([3,3,3,64],"weight2")
@@ -86,6 +86,7 @@ class FCN(cnn_base.CNNBase):
         self.bias_FC1     = self.bias_init([4096] , "bias_FC1")
         h_FC1             = self.convolve_activate(h_pool13,self.weight_FC1,self.bias_FC1)
 
+
         self.weight_FC2   = self.weight_init([1,1,4096,4096] , "weight_FC2")
         self.bias_FC2     = self.bias_init([4096] , "bias_FC2")
         h_FC2             = self.convolve_activate(h_FC1,self.weight_FC2,self.bias_FC2)
@@ -95,6 +96,6 @@ class FCN(cnn_base.CNNBase):
         self.bias_FC3     = self.bias_init([21] , "bias_FC3")
         self.h_FC3        = tf.nn.conv2d(h_FC2, self.weight_FC3, strides=[1,1,1,1],padding='SAME') + self.bias_FC3     #skip relu for last 1*1 conv layer
 
-        #self.weight_deconv = self.weight_init([32,32,21,1000] , "weight_deconv")
+        #self.weight_deconv = self.weight_init([64,64,21,21] , "weight_deconv")
 
-        #self.transpose_conv =   tf.nn.conv2d_transpose(self.h_FC3, self.weight_deconv , [1,256,256,21], [1,32,32,1], padding='SAME', name="DECONVOLUTION")
+        self.transpose_conv =  self._upscore_layer(self.h_FC3, [1,256,256,21] , 21 , "deconv" , 64 , 32 )

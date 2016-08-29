@@ -24,26 +24,24 @@ def next(num):
     from random import randint
     random_ind = randint(0,1000)
     #print random_ind
-    image = img.open(image_list[random_ind]+".jpg").resize((256,256))
-    label = img.open(label_list[random_ind]+".png").resize((256,256))
+    image = img.open(image_list[random_ind]+".jpg").resize((256,256) ,img.ANTIALIAS)
+    label = img.open(label_list[random_ind]+".png").resize((256,256) ,img.ANTIALIAS)
     #webbrowser.open(image_list[num]+".jpg")
     #webbrowser.open(label_list[num]+".png")
     #label.save("shortened.png")
 
-    if num == 99999:
+    if num == 49:
         #webbrowser.open("shortened.png")
         webbrowser.open(label_list[random_ind]+".png")
 
 
 
 
-    label_arr = np.asarray(label)
+    label_arr = np.array(label)
     image_arr = np.array(image)
 
 
-
-
-    label_arr_new = np.zeros([256,256])
+    label_arr_new = np.zeros([label_arr.shape[0],label_arr.shape[1]])
 
     for i in range (255):
         for j in range (255):
@@ -55,6 +53,6 @@ def next(num):
     label_arr = label_arr_new.astype(np.uint64)
     image_arr = image_arr[np.newaxis, ...]
     label_arr = label_arr[np.newaxis, ...]
-
+    #print label_arr.shape
 
     return image_arr,label_arr
