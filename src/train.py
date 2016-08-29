@@ -11,7 +11,7 @@ train_obj.graph_build()
 
 print "Training..."
 #h_FC3_1            = tf.image.resize_bilinear(train_obj.h_FC3, [256,256], align_corners=None, name=None)
-reshaped_logits    = tf.reshape(train_obj.transpose_conv, [-1, 21])  # shape [batch_size*256*256, 20]
+reshaped_logits    = tf.reshape(train_obj.transpose_conv, [-1, 22])  # shape [batch_size*256*256, 20]
 reshaped_labels    = tf.reshape(train_obj.y_true, [-1])              # shape [batch_size*256*256]
 
 loss               = tf.nn.sparse_softmax_cross_entropy_with_logits(reshaped_logits,
@@ -69,7 +69,7 @@ saver              =  tf.train.Saver(variable_list_save)
 train_obj.sess.run(tf.initialize_all_variables())
 
 for i in range(100):
-    image,label = next(3)
+    image,label = next(i)
 
     temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([train_obj.transpose_conv,temp,summary_op,train_step],
                                 feed_dict = {train_obj.x:image,
@@ -102,8 +102,9 @@ colour_map = [[ 0, 0 ,0],
               [64,128,128],
               [192,128,128],
               [0,64,0],
-              [128,64,0],
+			  [128,64,0],
               [128,192,0],
+			  [0,192,0],
               [0,64,128],
               [224,224,192]]
 
