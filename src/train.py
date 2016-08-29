@@ -68,8 +68,8 @@ saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
 
-for i in range(50):
-    image,label = next(i)
+for i in range(100):
+    image,label = next(3)
 
     temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([train_obj.transpose_conv,temp,summary_op,train_step],
                                 feed_dict = {train_obj.x:image,

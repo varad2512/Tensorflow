@@ -24,17 +24,17 @@ def next(num):
     from random import randint
     random_ind = randint(0,1000)
     #print random_ind
-    image = img.open(image_list[random_ind]+".jpg").resize((256,256) ,img.ANTIALIAS)
-    label = img.open(label_list[random_ind]+".png").resize((256,256) ,img.ANTIALIAS)
+    image = img.open(image_list[num]+".jpg").resize((256,256) ,img.ANTIALIAS)
+    label = img.open(label_list[num]+".png").resize((256,256) ,img.ANTIALIAS)
     #webbrowser.open(image_list[num]+".jpg")
     #webbrowser.open(label_list[num]+".png")
     #label.save("shortened.png")
 
     if num == 49:
         #webbrowser.open("shortened.png")
-        webbrowser.open(label_list[random_ind]+".png")
+        webbrowser.open(label_list[num]+".png")
 
-
+    webbrowser.open(label_list[num]+".png")
 
 
     label_arr = np.array(label)
@@ -46,7 +46,7 @@ def next(num):
     for i in range (255):
         for j in range (255):
             if label_arr[i,j] == 255:
-                label_arr_new[i,j] = 19
+                label_arr_new[i,j] = 20
 
     #print np.max(label_arr_new)
 
