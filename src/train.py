@@ -67,6 +67,8 @@ variable_list_save = [train_obj.w_conv1,train_obj.b_conv1,train_obj.w_conv2
 saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
+saver=tf.train.Saver(tf.all_variables())
+saver.save(train_obj.sess,'saved_var.txt')
 for j in range(30):
     for i in range(2):
         image,label = next(i)
@@ -140,5 +142,4 @@ final = final.astype(np.uint8)
 img1 = img.fromarray(final,'RGB')
 
 img1.save("my.png")
-#my = img.open("my.png").resize((256,256))
 webbrowser.open("my.png")

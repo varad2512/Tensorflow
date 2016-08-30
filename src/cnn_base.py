@@ -51,7 +51,7 @@ class CNNBase():
 
 	            weights = self.get_deconv_filter(f_shape)
 	            deconv = tf.nn.conv2d_transpose(bottom, weights, output_shape,
-	                                            strides=strides, padding='SAME')
+	                                            strides=strides, padding='SAME',name = "DECONV")
 
 	        return deconv
 
