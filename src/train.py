@@ -30,11 +30,11 @@ train_step         = tf.train.AdamOptimizer(1e-4).minimize(loss)
 
 
 temp               = tf.argmax(train_obj.transpose_conv,3)
-'''
+
 temp               = tf.reshape(temp,[1,tf.shape(train_obj.transpose_conv)[1],tf.shape(train_obj.transpose_conv)[2]  ])
 correct_prediction = tf.equal(tf.reshape(temp,[-1]),tf.reshape(train_obj.y_true,[-1]))
 accuracy           = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-'''
+
 
 
 
@@ -67,23 +67,24 @@ variable_list_save = [train_obj.w_conv1,train_obj.b_conv1,train_obj.w_conv2
 saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
+for j in range(50):
+    for i in range(2):
+        image,label = next(i)
 
-for i in range(100):
-    image,label = next(i)
+        accu,temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([accuracy,train_obj.transpose_conv,temp,summary_op,train_step],
+                                    feed_dict = {train_obj.x:image,
+                                   train_obj.y_true:label})
+        print i
 
-    temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([train_obj.transpose_conv,temp,summary_op,train_step],
-                                feed_dict = {train_obj.x:image,
-                               train_obj.y_true:label})
-    print i
-    print np.max(temp_1)
+        print np.max(temp_1)
 
-    #f i % 50 == 0:
-    writer.add_summary(summary_accuracy,i)
+        #f i % 50 == 0:
+        writer.add_summary(summary_accuracy,i)
 
-#print accu
+print accu
 
 
-print "k",temp_2
+
 
 colour_map = [[ 0, 0 ,0],
               [ 128,0 ,0],
@@ -113,8 +114,10 @@ colour_map = [[ 0, 0 ,0],
 l=np.zeros([256,256])
 for i in range (255):
     for j in range (255):
+        #if temp_1[0,i,j] != 0: #and  temp_1[0,i,j] != 21:
+            #print temp_1[0,i,j]
         l[i,j] = temp_1[0,i,j]
-l=l.astype(np.uint8)
+l=l.astype(np.uint64)
 
 
 
@@ -133,7 +136,7 @@ print final
 final = final.astype(np.uint8)
 
 img1 = img.fromarray(final,'RGB')
-img1.show()
+
 img1.save("my.png")
 #my = img.open("my.png").resize((256,256))
 webbrowser.open("my.png")
