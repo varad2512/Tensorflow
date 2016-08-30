@@ -67,22 +67,24 @@ variable_list_save = [train_obj.w_conv1,train_obj.b_conv1,train_obj.w_conv2
 saver              =  tf.train.Saver(variable_list_save)
 '''
 train_obj.sess.run(tf.initialize_all_variables())
-for j in range(50):
+for j in range(30):
     for i in range(2):
         image,label = next(i)
 
         accu,temp_2,temp_1,summary_accuracy,step = train_obj.sess.run([accuracy,train_obj.transpose_conv,temp,summary_op,train_step],
                                     feed_dict = {train_obj.x:image,
                                    train_obj.y_true:label})
-        print i
+        print i+j
 
-        print np.max(temp_1)
+        #print np.max(temp_1)
 
         #f i % 50 == 0:
         writer.add_summary(summary_accuracy,i)
 
 print accu
 
+image_out = next_test()
+temp_1 = train_obj.sess.run(temp,feed_dict = {train_obj.x:image_out})
 
 
 

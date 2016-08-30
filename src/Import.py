@@ -20,7 +20,7 @@ def read_labeled_image_list(path):
 
 def next(num):
     image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
-
+    print len(image_list)
     from random import randint
     random_ind = randint(0,1000)
     #print random_ind
@@ -58,3 +58,12 @@ def next(num):
 
 
     return image_arr,label_arr
+
+
+def next_test():
+    image_list, label_list = read_labeled_image_list('/home/varad/Desktop/Dataset/VOCdevkit/VOC2011/ImageSets/Segmentation/train.txt')
+    image = img.open(image_list[0]+".jpg").resize((256,256) ,img.ANTIALIAS)
+    webbrowser.open(image_list[0]+".jpg")
+    image_arr = np.asarray(image)
+    image_arr = image_arr[np.newaxis, ...]
+    return image_arr
